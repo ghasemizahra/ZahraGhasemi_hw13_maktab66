@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./1.css">
+   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'> 
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+<body>
+   <div class="container">
+       <br>
+    <table class="table table-bordered">
+        <thead>
+            <button type="button" class="bgcolor text-white" id="btn-addrow" >
+                <i class="fa fa-plus-circle" style="font-size:24px;color:white"></i>
+
+                add row
+              </button>
+
+          </thead>
+          <br>
+          <br>
+          <tbody id="myTable">
+
+            <tr  class="bgcolor text-white">
+                <td class="border-right">action</td>
+              <td class="border-right">number</td>
+              <td class="border-right">Type</td>
+                  <td colspan="2" >statuse</td>
+            </tr>
+            <tr>
+                <td class="border-right"> <button type="button" id="delete-btn" class="btn btn-danger" onclick='deleted(this)'>
+                     
+                    <i class="fa fa-trash-o" style="font-size:24px" ></i>
+                    Delete
+                  </button> 
+                  <button type="button" id="clone-btn" class="btn btn-primary" onclick="cloneRow(this)">
+                     
+                    <i class="fa fa-copy" style="font-size:24px"></i>
+                    Clone
+                  </button>
+                </td>
+              <td>
+                  <input type="text" class="border-right" name="" id="">
+            </td>
+              <td>
+                  <input type="text" class="border-right" name="" id="">
+            </td>
+                  <td colspan="2" >
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <label class="form-check-label" for="inlineRadio1">New</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                        <label class="form-check-label" for="inlineRadio2">inprogress</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                        <label class="form-check-label" for="inlineRadio3">confirmed</label>
+                      </div>
+                  </td>
+            </tr>
+            
+          </tbody>
+      </table>
+      <p class=" mb-2">Allow rows number: <span class="countrow">1</span></p>
+                 <p>Not Confirmed rows number: <span class="counter-cheked">1</span></p>
+   </div>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+   <script>
+     $rowCount = $('table tr').length-1;
+$rowCount2 = $('table tr').length-1;
+$(document).ready(function(){
+    //add row
+    $(".btn-addrow").click(function(){     
+     let $tbody = $('tbody');
+     $tbody.prepend(
+        $('<tr/>').append(
+          //btn 
+          $('<td/>').append(
+            $('<button/>', {class: ' btn-danger' , text: 'Delete' ,  onclick: 'deleted(this)'}).append($('<i/>', {class: 'fas fa-trash px-1'})),
+            $('<button/>', {class: ' btn-primary ' , text: 'Clone' , onclick: 'cloneRow(this)'}).append($('<i/>', {class: 'fas fa-copy px-1'}))
+          ) 
+        )
+        .append($('<td/>').append($('<input>' , {type: 'number' , class: 'num'})))    //input number
+        .append($('<td/>').append($('<input>' , {type: 'text'})))     //input text
+        //input radios
+        .append($('<td/>').append($('<input>' , {type: 'radio', value: 'option1' , id: 'inlineRadio1', name: 'inlineRadioOptions'})
+        ).append($('<lable/>' , {for: 'inlineRadio1', text: 'New' ,class: 'form-check form-check-inline'}))
+        .append($('<input>' , {type: 'radio', value: 'option2' , id: 'inlineRadio2', name: 'inlineRadioOptions' ,class: 'form-check form-check-inline'})
+        ).append($('<lable/>' , {for: 'inlineRadio2', text: 'inprogress' , class: 'form-check form-check-inline'}))        
+        .append($('<input>' , {type: 'radio', value: 'option3' , onchange: 'func(colorr)', id: 'inlineRadio3', name: 'inlineRadioOptions' , class: ' confirmed' })
+        ).append($('<lable/>' , {for: 'inlineRadio3', text: 'confirmed' , class: 'form-check form-check-inline'})))
+        
+     );
+     $rowCount++
+     $(".countrow").text($rowCount);
+     $rowCount2++
+     $(".counter-cheked").text($rowCount2);
+
+
+     
+    
+    });
+
+
+    
+
+  
+});
+
+   
+//delete Row
+function deleted(obj) {
+    $(obj).parent().parent().remove();
+    $rowCount--
+    $(".countrow").text($rowCount)
+}
+
+//clone Row
+function cloneRow(copyy){
+  $parentBtn= $(copyy).parent().parent()
+  $trNew = $parentBtn.clone();
+  $parentBtn.after($trNew);
+  $rowCount++
+  $(".countrow").text($rowCount)
+}
+
+function func(colorr){
+  // $inpu='input[type=text]';
+  $parentRadio= $(colorr).parent().parent()
+  $("  parentRadio > input[type=text]").css(
+    "background-color", "green");
+}
+
+
+
+
+
+   
+</script>
+</body>
+
+
+</html>
